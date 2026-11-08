@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>상태·느낌 — 소리결</title>
+
+<!-- Pretendard (로컬 파일) / Apple SD Gothic Neo 는 맥 시스템 폰트 사용 -->
+<link rel="stylesheet" href="/fonts/pretendard/pretendard.css">
+
+<link rel="stylesheet" href="/css/reset.css">
+<link rel="stylesheet" href="/css/variables.css">
+<link rel="stylesheet" href="/css/common.css">
+<link rel="stylesheet" href="/css/detail.css">
+<link rel="stylesheet" href="/css/gyeol-pad.css">
+<link rel="stylesheet" href="/css/compare.css">
+<link rel="stylesheet" href="/css/group-note.css">
+<link rel="stylesheet" href="/css/attract.css">
+</head>
+<body class="page page--detail" data-page="state">
+
+<div class="page page--detail" id="state-page">
+
+  <!-- 왼쪽: 520px 블랙 사이드바 -->
+  <aside class="detail-sidebar" id="state-sidebar" aria-label="상태·느낌 사이드바">
+
+    <!-- 고정 상단 헤더: 도형 심볼, 타이포, 설명 -->
+    <div class="detail-sidebar__header" id="state-header">
+      <!-- 90*90 사이즈 이미지 (도형 호버 상태: 동심원) -->
+      <a href="/main.html" class="detail-sidebar__icon" id="state-symbol" aria-label="메인 화면으로 이동" title="소리결 메인으로 돌아가기">
+        <svg viewBox="0 0 340 340" aria-hidden="true">
+          <!-- 1: 외곽 화이트 링 (두께 24px) -->
+          <circle fill="#ffffff" cx="170" cy="170" r="168"/>
+          <!-- 2: 블랙 갭 (너비 20px) -->
+          <circle class="icon-dark-fill" fill="#000000" cx="170" cy="170" r="144"/>
+          <!-- 3: 얇은 화이트 링 (두께 10px) -->
+          <circle fill="#ffffff" cx="170" cy="170" r="124"/>
+          <!-- 4: 넓은 블랙 갭 (너비 38px) -->
+          <circle class="icon-dark-fill" fill="#000000" cx="170" cy="170" r="114"/>
+          <!-- 5: 굵은 화이트 링 (두께 26px) -->
+          <circle fill="#ffffff" cx="170" cy="170" r="76"/>
+          <!-- 6: 중간 블랙 갭 (너비 26px) -->
+          <circle class="icon-dark-fill" fill="#000000" cx="170" cy="170" r="50"/>
+          <!-- 7: 중심 화이트 코어 (반지름 24px) -->
+          <circle fill="#ffffff" cx="170" cy="170" r="24"/>
+        </svg>
+      </a>
+
+      <!-- 이미지로부터 46px 거리: 상태·느낌 (Apple SD Gothic Neo Thin, 약 40pt, 자간 -5%, 행간 100%) -->
+      <h1 class="detail-sidebar__title" id="state-title">상태·느낌</h1>
+
+      <!-- 타이포로부터 12px 떨어진 곳: pretendard Regular 14pt 130% 한 줄 진행 -->
+      <p class="detail-sidebar__desc" id="state-desc">몸과 감각으로 느끼는 상태의 정도 차이를 담은 말</p>
+    </div>
+
+    <!-- 스크롤 가능 계열어 영역 (상·하단 블러 효과) -->
+    <div class="detail-sidebar__scroll-container" id="state-scroll-container">
+      <div class="detail-sidebar__blur detail-sidebar__blur--top" aria-hidden="true"></div>
+
+      <div class="detail-sidebar__scroll-area" id="state-scroll-area">
+        <div class="detail-sidebar__groups" id="state-groups">
+
+          <!-- 1. 바글바글 계열 (최대 3개 한 줄: 3 / 3, n = 1 ~ 6) -->
+          <section class="word-group" id="group-bageul" data-group="bageul">
+            <h2 class="word-group__title" role="button" tabindex="0">바글바글 계열</h2>
+            <div class="word-group__sub">
+              <div class="word-line">
+                <button type="button" class="word-chip" data-word="바글바글" data-index="1" data-path="assets/StatusFeeling/1.gif" data-group="bageul">바글바글</button>
+                <span class="word-slash">/</span>
+                <button type="button" class="word-chip" data-word="보글보글" data-index="2" data-path="assets/StatusFeeling/2.gif" data-group="bageul">보글보글</button>
+                <span class="word-slash">/</span>
+                <button type="button" class="word-chip" data-word="부글부글" data-index="3" data-path="assets/StatusFeeling/3.gif" data-group="bageul">부글부글</button>
+              </div>
+              <div class="word-line">
+                <button type="button" class="word-chip" data-word="빠글빠글" data-index="4" data-path="assets/StatusFeeling/4.gif" data-group="bageul">빠글빠글</button>
+                <span class="word-slash">/</span>
+                <button type="button" class="word-chip" data-word="뽀글뽀글" data-index="5" data-path="assets/StatusFeeling/5.gif" data-group="bageul">뽀글뽀글</button>
+                <span class="word-slash">/</span>
+                <button type="button" class="word-chip" data-word="뿌글뿌글" data-index="6" data-path="assets/StatusFeeling/6.gif" data-group="bageul">뿌글뿌글</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- 2. 잔득잔득 계열 (잔득, 진득, 짠득, 찐득 4개, n = 7 ~ 10) -->
+          <section class="word-group" id="group-jandeuk" data-group="jandeuk">
+            <h2 class="word-group__title" role="button" tabindex="0">잔득잔득 계열</h2>
+            <div class="word-group__sub">
+              <div class="word-line">
+                <button type="button" class="word-chip" data-word="잔득잔득" data-index="7" data-path="assets/StatusFeeling/7.gif" data-group="jandeuk">잔득잔득</button>
+                <span class="word-slash">/</span>
+                <button type="button" class="word-chip" data-word="진득진득" data-index="8" data-path="assets/StatusFeeling/8.gif" data-group="jandeuk">진득진득</button>
+              </div>
+              <div class="word-line">
+                <button type="button" class="word-chip" data-word="짠득짠득" data-index="9" data-path="assets/StatusFeeling/9.gif" data-group="jandeuk">짠득짠득</button>
+                <span class="word-slash">/</span>
+                <button type="button" class="word-chip" data-word="찐득찐득" data-index="10" data-path="assets/StatusFeeling/10.gif" data-group="jandeuk">찐득찐득</button>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </div>
+
+      <div class="detail-sidebar__blur detail-sidebar__blur--bottom" aria-hidden="true"></div>
+    </div>
+  </aside>
+
+  <!-- 오른쪽: 화이트 메인 영역 (에셋 GIF / 뜻 / 하단 선택지) -->
+  <main class="detail-main" id="state-main" role="main">
+    <!-- 초기 상태 안내 (계열어 선택 전) -->
+    <div class="detail-initial-prompt" id="state-initial-prompt">
+      <p class="detail-initial-prompt__text">왼쪽의 계열어를 선택해보세요</p>
+    </div>
+
+    <!-- 우측 상단: 뜻 영역 (우측 정렬, top 100px, right 100px) -->
+    <div class="detail-meaning" id="state-meaning">
+      <span class="detail-meaning__label">뜻</span>
+      <span class="detail-meaning__divider">|</span>
+      <span class="detail-meaning__text" id="state-meaning-text">적은 양의 액체가 자꾸 넓게 퍼지며 끓거나 솟아오르는 소리</span>
+    </div>
+
+    <!-- 중앙: 에셋 미디어 스테이지 -->
+    <div class="detail-main__stage" id="state-stage">
+      <div class="detail-stage-media" id="state-stage-media">
+        <img class="detail-stage-gif" id="state-stage-gif" src="" alt="단어 비주얼" />
+        <div class="detail-stage-fallback" id="state-stage-fallback">
+          <!-- GIF 로드 전/미등록 시 시안과 동일한 붉은 에셋 플레이스홀더 -->
+          <div class="detail-stage-placeholder" id="state-stage-placeholder">
+            <span class="detail-stage-placeholder__text">gif 들어갈 곳</span>
+            <span class="detail-stage-placeholder__path" id="state-placeholder-path">assets/StatusFeeling/1.gif</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 우측 하단: 가로 구분선 및 계열어 가로 선택지 (오른쪽 정렬, gap 85px) -->
+    <div class="detail-footer" id="state-footer">
+      <div class="detail-footer__divider" aria-hidden="true"></div>
+      <div class="detail-footer__words" id="state-footer-words" role="tablist" aria-label="계열어 선택지">
+        <!-- JS로 동적 렌더링 (초기: 바글바글 계열 6개) -->
+      </div>
+    </div>
+  </main>
+
+</div>
+
+<script src="/js/words-data.js"></script>
+<script src="/js/common.js"></script>
+<script src="/js/voice.js"></script>
+<script src="/js/detail.js"></script>
+<script src="/js/gyeol-pad.js"></script>
+<script src="/js/compare.js"></script>
+<script src="/js/gyeol-stats.js"></script>
+<script src="/js/group-note.js"></script>
+<script src="/js/attract.js"></script>
+</body>
+</html>

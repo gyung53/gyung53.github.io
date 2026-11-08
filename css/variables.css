@@ -1,0 +1,46 @@
+/* ==========================================================================
+   variables.css — 소리결(Sorigyeol) 디자인 토큰
+   모든 페이지가 이 파일을 공유합니다. 색상/폰트를 바꿀 땐 이 파일만 고치면 됩니다.
+   ========================================================================== */
+
+:root {
+  /* ---- 색상 ---- */
+  --color-black: #121212;   /* 사이트 전체 공통 블랙 */
+  --color-white: #ffffff;
+  --color-gray-40: rgba(18, 18, 18, 0.4);
+  --color-gray-20: rgba(18, 18, 18, 0.2);
+  --color-gray-10: rgba(18, 18, 18, 0.1);
+  --color-line: #C7C7C7;     /* 검색 버튼/검색창 테두리 */
+  --color-surface: #F8F8F8;  /* 검색 버튼/검색창 배경 */
+
+  /* ---- 폰트 ---- */
+  --font-pretendard: 'Pretendard', -apple-system, BlinkMacSystemFont,
+    'Malgun Gothic', sans-serif;
+
+  /* ---- 타이포 스케일 ---- */
+  --fs-nav: 20px;          /* GNB 선택지 — Pretendard SemiBold 20 */
+  --fs-body: 16px;         /* 본문/설명 텍스트 */
+  --fs-word: 96px;         /* 상세 페이지 큰 단어 타이포 */
+
+  /* ---- 레이아웃 ---- */
+  --page-width: 1900px;    /* 1900px 전체 캔버스 */
+  --pad-top: 26px;
+  --pad-right: 100px;
+  --pad-bottom: 76px;
+  --pad-left: 124px;       /* 1900 - 100(오른쪽) - 1676(GNB/Hero) = 124px */
+
+  --gnb-width: 1676px;     /* GNB 가로 넓이: 1676px */
+  --gnb-height: 54px;
+  --gnb-gap-below: 84px;   /* GNB와 다음 요소 사이 간격 */
+  --gnb-gap-inline: 383px; /* 서치 클릭 전 메뉴 ↔ 검색아이콘 사이 여백: 383px */
+
+  --shape-size: 340px;     /* 도형 한 변 크기 */
+  --shape-gap: calc((1676px - (4 * 340px)) / 3); /* (1676 - 1360) / 3 ≈ 105.33px */
+  --hero-width: 1676px;    /* Hero 섹션 가로 넓이: 1676px */
+  --row-gap: 160px;        /* 4개 도형 줄 ↔ 3개 도형 줄 사이 간격 */
+  --logo-box-width: 320px; /* 로고 · 설명 박스 가로 폭 = 원형 도형과 동일(340px) */
+
+  /* ---- 트랜지션 ---- */
+  --ease-elastic: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+}

@@ -1,0 +1,203 @@
+/* ==========================================================================
+   gyeol-pad.css — 결 조절 패드 (상세 페이지 왼쪽 아래, 하단 구분선 위)
+   ========================================================================== */
+
+.gyeol-pad {
+  position: absolute;
+  left: 60px;
+  bottom: 104px;          /* 하단 구분선(.detail-footer__divider) 바로 위 */
+  z-index: 12;
+  font-family: var(--font-pretendard);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition: opacity 0.35s ease, transform 0.35s ease, visibility 0.35s;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.is-word-active .gyeol-pad.is-ready {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* 헤더 */
+.gyeol-pad__head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.gyeol-pad__title {
+  font-size: 14.5px;
+  font-weight: 500;
+  color: #1c1c1e;
+  letter-spacing: -0.02em;
+}
+
+.gyeol-pad__hint {
+  font-size: 12px;
+  font-weight: 300;
+  color: #8E8E93;
+  letter-spacing: -0.02em;
+}
+
+/* 본문: [세로축] [필드] / [가로축] */
+.gyeol-pad__body {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto;
+  column-gap: 6px;
+}
+
+.gyeol-pad__yaxis {
+  position: relative;
+  width: 34px;
+}
+
+.gyeol-pad.is-1d .gyeol-pad__yaxis {
+  width: 0;
+}
+
+.gyeol-pad__xaxis {
+  grid-column: 2;
+  position: relative;
+  height: 30px;
+}
+
+.gyeol-pad__tick {
+  position: absolute;
+  font-family: 'Apple SD Gothic Neo', var(--font-pretendard);
+  font-weight: 300;
+  font-size: 15px;
+  color: #3a3a3c;
+  line-height: 1;
+}
+
+.gyeol-pad__xaxis .gyeol-pad__tick {
+  top: 9px;
+  transform: translateX(-50%);
+}
+
+.gyeol-pad__yaxis .gyeol-pad__tick {
+  right: 6px;
+  transform: translateY(-50%);
+}
+
+.gyeol-pad__axisname {
+  position: absolute;
+  font-size: 11px;
+  font-weight: 400;
+  color: #AEAEB2;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.gyeol-pad__xaxis .gyeol-pad__axisname {
+  left: calc(100% + 10px);
+  top: 11px;
+}
+
+.gyeol-pad__yaxis .gyeol-pad__axisname {
+  right: 6px;
+  top: -3px;
+}
+
+/* 필드 */
+.gyeol-pad__field {
+  position: relative;
+  border: 1px solid #E5E5E5;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.85);
+  cursor: grab;
+  touch-action: none;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.gyeol-pad__field:hover,
+.gyeol-pad__field:focus-visible {
+  border-color: #C7C7CC;
+}
+
+.gyeol-pad.is-dragging .gyeol-pad__field {
+  cursor: grabbing;
+  border-color: var(--color-black);
+}
+
+.gyeol-pad__grid svg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.gyeol-pad__grid line {
+  stroke: #EDEDED;
+  stroke-width: 1;
+}
+
+/* 칸 (단어 위치) */
+.gyeol-pad__cell {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  pointer-events: none;   /* 클릭은 필드가 처리 */
+}
+
+.gyeol-pad__dot {
+  position: absolute;
+  left: -3px;
+  top: -3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #C7C7CC;
+}
+
+.gyeol-pad__label {
+  position: absolute;
+  top: 15px;
+  left: 0;
+  transform: translateX(-50%);
+  font-size: 11px;
+  font-weight: 300;
+  color: #8E8E93;
+  white-space: nowrap;
+  letter-spacing: -0.02em;
+  transition: color 0.18s ease, font-weight 0.18s ease;
+}
+
+.gyeol-pad__cell.is-active .gyeol-pad__label {
+  color: #000000;
+  font-weight: 500;
+}
+
+/* 손잡이 */
+.gyeol-pad__knob {
+  position: absolute;
+  left: -11px;
+  top: -11px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--color-black);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  pointer-events: none;
+  will-change: transform;
+}
+
+.gyeol-pad__knob.is-snapping {
+  transition: transform 0.32s var(--ease-elastic);
+}
+
+.gyeol-pad.is-dragging .gyeol-pad__knob {
+  box-shadow: 0 0 0 8px rgba(18, 18, 18, 0.08), 0 6px 16px rgba(0, 0, 0, 0.2);
+}

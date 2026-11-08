@@ -1,0 +1,6 @@
+{
+  "name": "소리결",
+  "description": "의성어·의태어 계열어 인터랙티브 아카이브 사전 프로젝트 소리결",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

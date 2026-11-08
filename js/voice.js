@@ -1,0 +1,366 @@
+/* ==========================================================================
+   voice.js — 음성 인식으로 계열어 상세 페이지 이동
+   - 브라우저 내장 Web Speech API (SpeechRecognition, ko-KR) 사용
+   - 검색 캡슐 안에 마이크 버튼 추가 → '누르고 있는 동안만' 듣기 (무전기 방식)
+     · 마우스/터치: 마이크 버튼을 누른 채로 말하고 손을 떼면 검색
+     · 키보드: 스페이스바를 누른 채로 말하고 떼면 검색 (검색창에 커서가 있어도 동작)
+   - 말하는 동안 입력창에 실시간 표시
+   - 인식 결과 처리 순서
+       1) 계열어 단어 검색 (기존 searchSorigyeolWord 재사용)
+       2) 카테고리 이름 ("자연", "빛 색깔", "사람" …) → 카테고리 페이지 이동
+       3) 자모 단위 유사도 비교로 가장 가까운 계열어 추정 (예: '반짝 반짝' / '반짝반자' 오인식 보정)
+   - 지원: Chrome / Edge / Safari (Firefox 미지원 → 버튼 자동 숨김)
+   - 주의: https 또는 localhost 에서만 마이크 사용 가능
+   ========================================================================== */
+
+(function () {
+  'use strict';
+
+  const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  // 카테고리 음성 명령 (키워드 중 하나만 들어가도 이동)
+  const CATEGORY_COMMANDS = [
+    { keys: ['상태', '느낌'],        page: '/pages/state.html' },
+    { keys: ['표정', '감정'],        page: '/pages/expression.html' },
+    { keys: ['빛', '색깔', '색'],    page: '/pages/light.html' },
+    { keys: ['모양', '외형'],        page: '/pages/shape.html' },
+    { keys: ['사람'],                page: '/pages/person-sound.html' },
+    { keys: ['사물'],                page: '/pages/object-sound.html' },
+    { keys: ['자연'],                page: '/pages/nature.html' },
+    { keys: ['처음', '메인', '홈'],  page: '/main.html' }
+  ];
+
+  /* ---------------- 한글 자모 분해 & 유사도 ---------------- */
+  function toJamo(str) {
+    const out = [];
+    for (const ch of str) {
+      const code = ch.charCodeAt(0) - 0xAC00;
+      if (code >= 0 && code < 11172) {
+        out.push('c' + Math.floor(code / 588));          // 초성
+        out.push('v' + Math.floor((code % 588) / 28));   // 중성
+        const jong = code % 28;
+        if (jong) out.push('j' + jong);                  // 종성
+      } else {
+        out.push(ch);
+      }
+    }
+    return out;
+  }
+
+  function editDistance(a, b) {
+    const dp = Array.from({ length: a.length + 1 }, (_, i) => [i]);
+    for (let j = 1; j <= b.length; j++) dp[0][j] = j;
+    for (let i = 1; i <= a.length; i++) {
+      for (let j = 1; j <= b.length; j++) {
+        dp[i][j] = Math.min(
+          dp[i - 1][j] + 1,
+          dp[i][j - 1] + 1,
+          dp[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)
+        );
+      }
+    }
+    return dp[a.length][b.length];
+  }
+
+  // 가장 가까운 계열어 1개 (너무 멀면 null)
+  function findClosestWord(text) {
+    const words = window.SORIGYEOL_WORDS || [];
+    const q = toJamo(text);
+    if (!q.length) return null;
+    let best = null;
+    let bestDist = Infinity;
+    words.forEach((item) => {
+      const d = editDistance(q, toJamo(item.word));
+      if (d < bestDist) { bestDist = d; best = item; }
+    });
+    const limit = Math.max(2, Math.round(toJamo(best ? best.word : '').length * 0.25));
+    return bestDist <= limit ? best : null;
+  }
+
+  // "반짝반짝 보여줘." → "반짝반짝보여줘" (한글만 남기고 공백 제거)
+  function normalize(text) {
+    return String(text || '').replace(/[^가-힣]/g, '');
+  }
+
+  function findCategory(text) {
+    return CATEGORY_COMMANDS.find((c) => c.keys.some((k) => text.includes(k))) || null;
+  }
+
+  /* ---------------- 인식 결과 → 이동 ---------------- */
+  function handleResult(alternatives) {
+    const S = window.SorigyeolSearch;
+    if (!S) return;
+    const candidates = alternatives.map(normalize).filter(Boolean);
+    if (!candidates.length) {
+      S.showToast('잘 들리지 않았어요. 다시 말해 주세요');
+      return;
+    }
+
+    const search = window.searchSorigyeolWord;
+
+    // 1) 모든 후보 중 계열어와 정확/부분 일치하는 것
+    for (const c of candidates) {
+      const hit = typeof search === 'function' ? search(c) : null;
+      if (hit) return go(hit.word);
+    }
+
+    // 2) 카테고리 이름
+    for (const c of candidates) {
+      const cat = findCategory(c);
+      if (cat) {
+        S.showToast(`'${alternatives[0]}' → 카테고리로 이동합니다`);
+        setTimeout(() => { window.location.href = cat.page; }, 400);
+        return;
+      }
+    }
+
+    // 3) 발음이 가장 비슷한 계열어
+    for (const c of candidates) {
+      const near = findClosestWord(c);
+      if (near) return go(near.word);
+    }
+
+    S.input.value = alternatives[0];
+    S.updateSuggestions();
+    S.showToast(`'${alternatives[0]}'에 일치하는 계열어를 찾을 수 없습니다`);
+  }
+
+  function go(word) {
+    const S = window.SorigyeolSearch;
+    S.input.value = word;
+    S.execute(word);
+  }
+
+  /* ---------------- UI & 인식기 ---------------- */
+  function init() {
+    const S = window.SorigyeolSearch;
+    if (!S) return;
+    const pill = S.gnb.querySelector('.gnb__search-pill');
+    const searchBtn = S.gnb.querySelector('.gnb__search-btn');
+    if (!pill || !searchBtn) return;
+
+    if (!Recognition) {
+      // 미지원 브라우저: 버튼을 만들지 않음 (텍스트 검색은 그대로 동작)
+      return;
+    }
+
+    const micBtn = document.createElement('button');
+    micBtn.type = 'button';
+    micBtn.className = 'gnb__voice-btn';
+    micBtn.id = 'voice-search-btn';
+    micBtn.setAttribute('aria-label', '음성으로 검색');
+    micBtn.innerHTML = `
+      <svg viewBox="0 0 20 20" aria-hidden="true">
+        <rect x="7" y="2" width="6" height="10" rx="3"/>
+        <path d="M4.5 9.5a5.5 5.5 0 0 0 11 0"/>
+        <line x1="10" y1="15" x2="10" y2="18"/>
+      </svg>`;
+    pill.insertBefore(micBtn, searchBtn);
+
+    micBtn.title = '누르고 있는 동안 말하세요';
+
+    const rec = new Recognition();
+    rec.lang = 'ko-KR';
+    rec.interimResults = true;   // 말하는 중간 결과를 입력창에 실시간 표시
+    rec.maxAlternatives = 5;     // 후보 여러 개 받아서 계열어와 비교
+    rec.continuous = true;       // 누르고 있는 동안에는 끊기지 않고 계속 듣기
+
+    /* ---- 상태 ----
+       pressed     : 지금 버튼(또는 스페이스바)을 누르고 있는지
+       running     : 인식기가 실제로 켜져 있는지
+       handled     : 이번 누름의 결과를 이미 처리했는지 (중복 처리 방지)
+       carryText   : 누르는 중 브라우저가 인식을 끊고 다시 켰을 때, 앞 구간에서 들은 말
+       sessionText : 현재 구간에서 들은 말 (확정 + 미확정)
+       Chrome 은 손을 뗀 뒤 onend 를 늦게 주거나 아예 안 주는 경우가 있어서,
+       손을 떼면 최대 1.2초만 기다렸다가 그때까지 들은 말로 무조건 검색함 */
+    let pressed = false;
+    let running = false;
+    let handled = true;
+    let pressedAt = 0;
+    let carryText = '';
+    let sessionText = '';
+    let lastFinalAlts = [];     // 확정 결과가 1개일 때 그 후보들
+    let finalCount = 0;
+    let errorShown = false;
+    let startAfterEnd = false;
+    let finalizeTimer = null;
+
+    const log = (...args) => console.info('[소리결 음성]', ...args);
+
+    function setListening(on) {
+      micBtn.classList.toggle('is-listening', on);
+      S.gnb.classList.toggle('gnb--listening', on);
+      micBtn.setAttribute('aria-label', on ? '말하는 중 — 손을 떼면 검색' : '음성으로 검색');
+      S.input.placeholder = on ? '말하는 중… 손을 떼면 검색해요' : '검색할 의성어·의태어를 입력하세요';
+    }
+
+    function fullText() {
+      return (carryText + ' ' + sessionText).replace(/\s+/g, ' ').trim();
+    }
+
+    function startRec() {
+      try { rec.start(); log('start'); } catch (err) { log('start 실패', err && err.message); }
+    }
+
+    function press() {
+      if (pressed) return;
+      pressed = true;
+      handled = false;
+      pressedAt = Date.now();
+      carryText = '';
+      sessionText = '';
+      lastFinalAlts = [];
+      finalCount = 0;
+      errorShown = false;
+      if (finalizeTimer) { clearTimeout(finalizeTimer); finalizeTimer = null; }
+      S.open();
+      S.input.value = '';
+      setListening(true);
+      if (running) {
+        // 이전 인식이 아직 안 끝났으면 끊고, 끝나는 대로 새로 시작
+        startAfterEnd = true;
+        try { rec.abort(); } catch (err) { /* 무시 */ }
+      } else {
+        startRec();
+      }
+    }
+
+    function release() {
+      if (!pressed) return;
+      pressed = false;
+      setListening(false);
+      log('release, 지금까지:', fullText());
+      if (running) {
+        try { rec.stop(); } catch (err) { /* 무시 */ }   // stop → 마지막 결과 확정 후 onend
+      }
+      // onend 가 늦거나 오지 않아도 1.2초 뒤에는 반드시 처리
+      finalizeTimer = setTimeout(() => {
+        if (running) { try { rec.abort(); } catch (err) { /* 무시 */ } }
+        finalize('timeout');
+      }, running ? 1200 : 400);
+    }
+
+    function finalize(reason) {
+      if (handled) return;
+      handled = true;
+      if (finalizeTimer) { clearTimeout(finalizeTimer); finalizeTimer = null; }
+
+      const text = fullText() || S.input.value.trim();
+      log('finalize(' + reason + '):', text);
+
+      let alts = [];
+      if (!carryText && finalCount === 1 && lastFinalAlts.length) alts = lastFinalAlts.slice();
+      if (text && !alts.includes(text)) alts.unshift(text);
+
+      if (alts.length) { handleResult(alts); return; }
+      if (errorShown) return;
+      if (Date.now() - pressedAt < 500) {
+        S.showToast('누른 채로 말해 주세요');
+      } else {
+        S.showToast('잘 들리지 않았어요. 다시 말해 주세요');
+      }
+    }
+
+    rec.onstart = () => {
+      running = true;
+      log('onstart');
+      // 시작되기 전에 이미 손을 뗐다면 바로 종료
+      if (!pressed) { try { rec.stop(); } catch (err) { /* 무시 */ } }
+    };
+
+    rec.onresult = (e) => {
+      if (handled) return;                 // 이미 처리한 뒤 늦게 도착한 결과는 무시
+      let finalPart = '';
+      let interimPart = '';
+      finalCount = 0;
+      for (let i = 0; i < e.results.length; i++) {
+        const r = e.results[i];
+        if (r.isFinal) {
+          finalPart += r[0].transcript;
+          finalCount++;
+          lastFinalAlts = Array.from(r).map((x) => x.transcript);
+        } else {
+          interimPart += r[0].transcript;
+        }
+      }
+      sessionText = finalPart + interimPart;
+      S.input.value = fullText();
+    };
+
+    rec.onerror = (e) => {
+      log('onerror', e.error);
+      const msg = {
+        'not-allowed': '마이크 권한을 허용해 주세요',
+        'service-not-allowed': '마이크 권한을 허용해 주세요',
+        'audio-capture': '마이크를 찾을 수 없습니다',
+        'network': '음성 인식은 인터넷 연결이 필요합니다'
+      }[e.error];
+      if (msg) { errorShown = true; S.showToast(msg); }
+    };
+
+    rec.onend = () => {
+      running = false;
+      log('onend');
+      if (startAfterEnd) { startAfterEnd = false; if (pressed) startRec(); return; }
+      // 누르고 있는 중인데 브라우저가 스스로 끊은 경우 → 들은 말은 보관하고 다시 켜서 계속 듣기
+      if (pressed && !errorShown) {
+        carryText = fullText();
+        sessionText = '';
+        startRec();
+        return;
+      }
+      finalize('onend');
+    };
+
+    /* ---- 마우스·터치: 누르고 있는 동안만 듣기 ---- */
+    micBtn.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      try { micBtn.setPointerCapture(e.pointerId); } catch (err) { /* 무시 */ }
+      press();
+    });
+    micBtn.addEventListener('pointerup', release);
+    micBtn.addEventListener('pointercancel', release);
+    micBtn.addEventListener('lostpointercapture', release);
+    micBtn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); });
+    micBtn.addEventListener('contextmenu', (e) => e.preventDefault());   // 길게 누를 때 메뉴 방지
+
+    /* ---- 키보드: 스페이스바를 누르고 있는 동안만 듣기 ----
+       검색어(의성어·의태어)에는 띄어쓰기가 필요 없으므로, 검색창에 커서가 있어도
+       스페이스바는 항상 음성 인식으로 씀 (글자로 입력되지 않음).
+       단, 한글 조합 중(예: '반짝' 입력 중)에 누른 스페이스는 글자 확정용으로 그대로 둠. */
+    let keyHeld = null;
+    const isTalkKey = (e) => e.code === 'Space';
+
+    document.addEventListener('keydown', (e) => {
+      if (!isTalkKey(e)) return;
+      if (keyHeld) { e.preventDefault(); e.stopPropagation(); return; }   // 누르고 있는 동안 반복 입력 막기
+      if (e.isComposing || e.keyCode === 229) return;                      // 한글 조합 중
+      if (e.metaKey || e.ctrlKey || e.altKey || e.shiftKey) return;
+      const tag = (document.activeElement && document.activeElement.tagName) || '';
+      if (tag === 'TEXTAREA') return;
+      e.preventDefault();
+      e.stopPropagation();
+      keyHeld = e.code;
+      press();
+    }, true);
+
+    document.addEventListener('keyup', (e) => {
+      if (!keyHeld || e.code !== keyHeld) return;
+      e.preventDefault();
+      e.stopPropagation();
+      keyHeld = null;
+      release();
+      // 검색창에 커서가 남아 있으면 다음 스페이스바가 글자로 입력되므로 커서를 빼 둠
+      setTimeout(() => S.input.blur(), 300);
+    }, true);
+
+    // 창이 다른 곳으로 넘어가면 (키를 뗀 신호를 놓칠 수 있으므로) 강제로 종료
+    window.addEventListener('blur', () => { keyHeld = null; release(); });
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+
+  // 테스트용 노출 (콘솔에서 SorigyeolVoice.test('반짝 반자') 로 확인 가능)
+  window.SorigyeolVoice = { test: (t) => handleResult([t]), findClosestWord };
+})();

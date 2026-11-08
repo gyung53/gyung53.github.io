@@ -1,0 +1,618 @@
+/* ==========================================================================
+   detail.css — 상세 페이지 공통 스타일
+   왼쪽 블랙 사이드바 (고정 헤더 + 스크롤 계열어) + 오른쪽 화이트 스테이지
+   ========================================================================== */
+
+/* Apple SD Gothic Neo: 맥에 기본 설치된 시스템 폰트를 사용 (인터넷 불필요) */
+
+/* ---- 상세 페이지 전체 뷰포트 레이아웃 (상·하 흰 여백 완전 제거) ---- */
+.page--detail {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: stretch;
+  background: #ffffff;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+  transform: none !important;
+  opacity: 1 !important;
+}
+
+body[data-page="state"],
+body[data-page="expression"],
+body[data-page="light"],
+body[data-page="object-sound"],
+body[data-page="person-sound"],
+body[data-page="shape"],
+body[data-page="nature"] {
+  display: block !important;
+  height: 100vh !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+}
+
+/* --------------------------------------------------------------------------
+   왼쪽: 사이드바 영역
+   기본 너비 360px (#000000)
+   계열어 활성화 시 240px (지금의 2/3 수준) & #555555 로 자연스레 축소 전환
+   -------------------------------------------------------------------------- */
+.detail-sidebar {
+  width: 360px;
+  flex: 0 0 360px;
+  height: 100vh;
+  min-height: 100vh;
+  background: #000000;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  color: #ffffff;
+  z-index: 10;
+  overflow: hidden;
+  transition: width 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+              flex-basis 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.38s ease;
+}
+
+/* 활성화 상태: 2/3 수준 축소(240px) 및 #555555 배경색 전환 */
+.is-word-active .detail-sidebar {
+  width: 240px !important;
+  flex: 0 0 240px !important;
+  background-color: #555555 !important;
+}
+
+/* 고정 헤더: 도형 이미지, 상태·느낌 타이틀, 설명 (스크롤되지 않고 고정) */
+.detail-sidebar__header {
+  flex: 0 0 auto;
+  padding: 90px 20px 0 70px;
+  box-sizing: border-box;
+  transition: padding 0.38s ease;
+}
+
+.is-word-active .detail-sidebar__header {
+  padding: 90px 20px 0 45px;
+}
+
+/* 도형 호버 상태 비주얼 아이콘 */
+.detail-sidebar__icon {
+  width: 80px;
+  height: 80px;
+  flex: 0 0 80px;
+  display: block;
+  margin-bottom: 30px;              /* 이미지로부터 간격 */
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.25s var(--ease-standard), opacity 0.25s ease;
+}
+
+.detail-sidebar__icon:hover {
+  transform: scale(1.04);
+  opacity: 0.9;
+}
+
+.detail-sidebar__icon svg {
+  width: 80px;
+  height: 80px;
+  display: block;
+}
+
+.detail-sidebar__icon svg * {
+  transition: fill 0.38s ease, stroke 0.38s ease;
+}
+
+/* 계열어 활성화 시 사이드바 배경(#555555 전환)과 일치하도록 SVG 아이콘의 블랙 부분도 회색(#555555)으로 자연스럽게 전환 */
+.is-word-active .detail-sidebar__icon svg [fill="#000000"],
+.is-word-active .detail-sidebar__icon svg [fill="#000"],
+.is-word-active .detail-sidebar__icon svg [fill="black"],
+.is-word-active .detail-sidebar__icon svg .icon-dark-fill {
+  fill: #555555 !important;
+}
+
+.is-word-active .detail-sidebar__icon svg [stroke="#000000"],
+.is-word-active .detail-sidebar__icon svg [stroke="#000"],
+.is-word-active .detail-sidebar__icon svg [stroke="black"],
+.is-word-active .detail-sidebar__icon svg .icon-dark-stroke {
+  stroke: #555555 !important;
+}
+
+/* 상태·느낌 타이포 : Apple SD Gothic Neo Thin, 기본 38pt */
+.detail-sidebar__title {
+  margin: 0;
+  font-family: 'Apple SD Gothic Neo', 'AppleSDGothicNeo', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 100;                 /* Thin */
+  font-size: 38pt;
+  line-height: 1.0;                 /* 100% */
+  letter-spacing: -0.05em;          /* -5% */
+  color: #ffffff;
+  white-space: nowrap;
+  transition: font-size 0.38s cubic-bezier(0.16, 1, 0.3, 1), margin 0.35s ease;
+}
+
+/* 활성화 시: 이미지의 가로 넓이(80px) 수준으로 작아짐 */
+.is-word-active .detail-sidebar__title {
+  font-size: 15px !important;
+  line-height: 1.15;
+}
+
+/* 설명 텍스트 : pretendard Light 12px 130%, 한 줄 유지 */
+.detail-sidebar__desc {
+  margin: 22px 0 0 0;               /* 타이틀과 설명 사이 간격을 22px로 확장 */
+  font-family: var(--font-pretendard);
+  font-weight: 300;                 /* Light */
+  font-size: 12px;
+  line-height: 1.35;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+  white-space: nowrap;              /* 한 줄로 진행 */
+  transition: opacity 0.25s ease, max-height 0.35s ease, margin 0.35s ease;
+}
+
+/* 활성화 시: 설명 텍스트 숨김 처리 */
+.is-word-active .detail-sidebar__desc {
+  opacity: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   스크롤 컨테이너 (계열어 목록 영역)
+   설명 텍스트와 첫 계열 간격 정돈 및 상·하단 경계에 블러 마스크 적용
+   -------------------------------------------------------------------------- */
+.detail-sidebar__scroll-container {
+  flex: 1 1 auto;
+  position: relative;
+  overflow: hidden;
+  margin-top: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 상단 블러 오버레이 */
+.detail-sidebar__blur {
+  position: absolute;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.detail-sidebar__blur--top {
+  top: 0;
+  height: 28px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.4) 60%, transparent 100%);
+}
+
+.detail-sidebar__blur--bottom {
+  bottom: 0;
+  height: 48px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.5) 60%, transparent 100%);
+}
+
+/* 실제 스크롤되는 계열어 래퍼 */
+.detail-sidebar__scroll-area {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 56px 20px 80px 70px;   /* desc와 첫 계열 간격 상향 및 좌측 정렬 70px */
+  box-sizing: border-box;
+  scrollbar-width: none;            /* Firefox */
+  -ms-overflow-style: none;         /* IE/Edge */
+  transition: padding 0.38s ease;
+  /* 상·하단 경계 마스크 페이드 */
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0px,
+    black 28px,
+    black calc(100% - 40px),
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0px,
+    black 28px,
+    black calc(100% - 40px),
+    transparent 100%
+  );
+}
+
+.is-word-active .detail-sidebar__scroll-area {
+  padding: 40px 20px 80px 45px;
+}
+
+.is-word-active .detail-sidebar__blur--top {
+  background: linear-gradient(to bottom, rgba(85, 85, 85, 0.95) 0%, rgba(85, 85, 85, 0.5) 60%, transparent 100%);
+}
+
+.is-word-active .detail-sidebar__blur--bottom {
+  background: linear-gradient(to top, rgba(85, 85, 85, 0.95) 0%, rgba(85, 85, 85, 0.5) 60%, transparent 100%);
+}
+
+.detail-sidebar__scroll-area::-webkit-scrollbar {
+  display: none;                   /* Chrome/Safari */
+}
+
+/* 선택지 그룹 컨테이너 */
+.detail-sidebar__groups {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  transition: gap 0.35s ease;
+}
+
+.is-word-active .detail-sidebar__groups {
+  gap: 18px;
+}
+
+/* 개별 계열 그룹 */
+.word-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 계열 제목 (예: 바글바글 계열) : 가독성을 높인 16px */
+.word-group__title {
+  margin: 0 0 8px 0;
+  font-family: var(--font-pretendard);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.3;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  transition: color 0.2s ease, font-weight 0.2s ease;
+}
+
+/* 활성화 시: 00계열 텍스트만 남음 */
+.is-word-active .word-group__title {
+  margin: 0;
+  font-size: 15.5px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.65);
+  cursor: pointer;
+}
+
+.is-word-active .word-group__title:hover {
+  color: #ffffff;
+}
+
+.is-word-active .word-group.is-active-group .word-group__title {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+/* 딸린 계열어 목록 : 가독성을 개선한 13.5px, 최대 3개 한 줄 */
+.word-group__sub {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: var(--font-pretendard);
+  font-weight: 300;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* 활성화 시: 계열어 선택지는 사라짐 */
+.is-word-active .word-group__sub {
+  display: none !important;
+}
+
+.word-line {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 3px;
+}
+
+.word-chip {
+  background: none;
+  border: none;
+  padding: 2px 3px;
+  margin: 0;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 300;
+  line-height: inherit;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  border-radius: 2px;
+  transition: color 0.18s ease, transform 0.15s ease;
+  white-space: nowrap;
+}
+
+.word-chip:hover {
+  color: #ffffff;
+}
+
+.word-chip.is-active {
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.word-slash {
+  color: rgba(255, 255, 255, 0.35);
+  user-select: none;
+  margin: 0 3px;
+  font-size: 11.5px;
+}
+
+/* --------------------------------------------------------------------------
+   오른쪽: 화이트 메인 영역 (에셋 GIF 및 비주얼 스테이지)
+   -------------------------------------------------------------------------- */
+.detail-main {
+  flex: 1 1 0;
+  height: 100vh;
+  min-height: 100vh;
+  background: #ffffff;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+/* 초기 안내 (계열어 선택 전) */
+.detail-initial-prompt {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  transition: opacity 0.35s ease, visibility 0.35s;
+  pointer-events: none;
+}
+
+.detail-initial-prompt__text {
+  font-family: var(--font-pretendard);
+  font-size: 19px;
+  font-weight: 300;
+  color: #8E8E93;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.is-word-active .detail-initial-prompt {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+/* 우측 상단: 뜻 영역 (우측 100px, 상단 약 90~100px, 우측 정렬) */
+.detail-meaning {
+  position: absolute;
+  top: 90px;
+  right: 100px;
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 10px;
+  z-index: 10;
+  text-align: right;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity 0.35s ease, transform 0.35s ease, visibility 0.35s;
+  pointer-events: none;
+}
+
+.is-word-active .detail-meaning {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+  pointer-events: auto !important;
+}
+
+.detail-meaning__label {
+  font-family: var(--font-pretendard);
+  font-weight: 300;
+  font-size: 14.5px;
+  color: #8E8E93;
+  white-space: nowrap;
+}
+
+.detail-meaning__divider {
+  font-family: var(--font-pretendard);
+  font-weight: 200;
+  font-size: 13px;
+  color: #C7C7CC;
+  margin: 0 4px;
+  user-select: none;
+}
+
+.detail-meaning__text {
+  font-family: var(--font-pretendard);
+  font-weight: 300;
+  font-size: 14.5px;
+  color: #1c1c1e;
+  letter-spacing: -0.025em;
+  white-space: nowrap;
+}
+
+/* 중앙: 스테이지 영역 */
+.detail-main__stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.97);
+  transition: opacity 0.38s ease, transform 0.38s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.38s;
+  pointer-events: none;
+}
+
+.is-word-active .detail-main__stage {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: scale(1) !important;
+  pointer-events: auto !important;
+}
+
+/* 에셋 미디어 컨테이너 : 이전처럼 크고 시원하게 중앙 스테이지를 채우도록 확장 */
+.detail-stage-media {
+  width: 100%;
+  max-width: 1080px;
+  height: min(620px, calc(100vh - 230px));
+  max-height: calc(100vh - 230px);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-sizing: border-box;
+  background: transparent;
+}
+
+.detail-stage-gif {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.detail-stage-gif.is-visible {
+  display: block;
+  opacity: 1;
+}
+
+.detail-stage-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.detail-stage-fallback.is-hidden {
+  display: none !important;
+}
+
+/* 시안과 일치하는 부드러운 살구빛 핑크 박스 ("gif 들어갈 곳") 플레이스홀더 */
+.detail-stage-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #FDE9E8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 24px;
+}
+
+.detail-stage-placeholder__text {
+  font-family: var(--font-pretendard);
+  font-weight: 700;
+  font-size: clamp(48px, 6.5vw, 92px);
+  color: #FFFFFF;
+  letter-spacing: -0.025em;
+  line-height: 1.0;
+  user-select: none;
+}
+
+.detail-stage-placeholder__path {
+  display: none;
+  margin-top: 18px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Mono", monospace;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.92);
+  background: rgba(0, 0, 0, 0.28);
+  padding: 5px 14px;
+  border-radius: 4px;
+  letter-spacing: 0.01em;
+}
+
+/* --------------------------------------------------------------------------
+   우측 하단: 가로 구분선 및 계열어 가로 선택지
+   시안 기준: 절제된 크기의 계열어 (약 17px/15px), 65~80px 간격
+   -------------------------------------------------------------------------- */
+.detail-footer {
+  position: absolute;
+  left: 60px;
+  right: 80px;
+  bottom: 40px;
+  z-index: 10;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity 0.35s ease, transform 0.35s ease, visibility 0.35s;
+  pointer-events: none;
+}
+
+.is-word-active .detail-footer {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+  pointer-events: auto !important;
+}
+
+.detail-footer__divider {
+  height: 1px;
+  background: #E5E5E5;
+  margin-bottom: 22px;
+  width: 100%;
+}
+
+.detail-footer__words {
+  display: flex;
+  justify-content: flex-end;
+  align-items: baseline;
+  gap: 72px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.detail-footer__words::-webkit-scrollbar {
+  display: none;
+}
+
+/* 계열어 단어 버튼 : 시안 크기에 맞춘 절제된 폰트 크기 */
+.footer-word-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-family: var(--font-pretendard);
+  font-weight: 400;
+  font-size: 15px;
+  color: #707070;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.18s ease, font-size 0.2s ease;
+}
+
+.footer-word-btn:hover {
+  color: #111111;
+}
+
+/* 활성 상태의 단어 : 시안과 동일하게 살짝 더 크고 또렷한 블랙 */
+.footer-word-btn.is-active {
+  color: #000000;
+  font-size: 17px;
+  font-weight: 500;
+}
+
+

@@ -1,0 +1,242 @@
+/* ==========================================================================
+   compare.css — 비교 모드 (상세 페이지)
+   ========================================================================== */
+
+/* 왼쪽 위 토글 버튼 (오른쪽 위 '뜻' 영역과 대칭) */
+.compare-toggle {
+  position: absolute;
+  top: 82px;
+  left: 60px;
+  z-index: 14;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 16px 0 13px;
+  border: 1px solid #D1D1D6;
+  border-radius: 18px;
+  background: #ffffff;
+  font-family: var(--font-pretendard);
+  font-size: 13.5px;
+  font-weight: 400;
+  color: #1c1c1e;
+  letter-spacing: -0.02em;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity 0.35s ease, transform 0.35s ease, visibility 0.35s,
+              background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.is-word-active .compare-toggle {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.compare-toggle:hover {
+  border-color: var(--color-black);
+}
+
+.compare-toggle svg {
+  width: 17px;
+  height: 17px;
+}
+
+.compare-toggle rect {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+}
+
+.compare-toggle.is-on {
+  background: var(--color-black);
+  border-color: var(--color-black);
+  color: #ffffff;
+}
+
+/* 비교 중에는 기존 단일 스테이지와 뜻 영역을 숨김 */
+body.is-comparing.is-word-active .detail-main__stage,
+body.is-comparing.is-word-active .detail-meaning {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* 비교 스테이지 : 메인 영역 가운데 배치
+   (결 패드를 다시 켜면 left 를 380px 정도로 늘려 겹치지 않게 하세요) */
+.compare-stage {
+  position: absolute;
+  top: 150px;
+  bottom: 120px;
+  left: 100px;
+  right: 100px;
+  z-index: 11;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 120px minmax(0, 1fr);
+  align-items: stretch;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.98);
+  transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s;
+  pointer-events: none;
+}
+
+body.is-comparing.is-word-active .compare-stage {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+/* 패널 */
+.compare-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 0;
+  font-family: var(--font-pretendard);
+}
+
+.compare-panel__slot {
+  align-self: flex-start;
+  font-size: 11px;
+  font-weight: 500;
+  color: #AEAEB2;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+.compare-panel__media {
+  flex: 1 1 0;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.compare-panel__media img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.compare-panel__word {
+  margin: 18px 0 6px;
+  font-family: 'Apple SD Gothic Neo', var(--font-pretendard);
+  font-weight: 300;
+  font-size: 30px;
+  letter-spacing: -0.04em;
+  color: #000000;
+}
+
+.compare-panel__meaning {
+  margin: 0;
+  max-width: 320px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.5;
+  color: #6F6F6F;
+  word-break: keep-all;
+}
+
+/* B 자리 비어 있을 때 */
+.compare-panel.is-empty .compare-panel__placeholder {
+  flex: 1 1 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px dashed #D1D1D6;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.compare-panel__placeholder p {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 400;
+  color: #3a3a3c;
+}
+
+.compare-panel__placeholder span {
+  font-size: 12px;
+  font-weight: 300;
+  color: #8E8E93;
+}
+
+/* 가운데 : 차이 표시 + 교체 버튼 */
+.compare-middle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+}
+
+.compare-diff {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.compare-diff__row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.compare-diff__jamo {
+  font-family: 'Apple SD Gothic Neo', var(--font-pretendard);
+  font-weight: 300;
+  font-size: 24px;
+  color: #000000;
+  white-space: nowrap;
+}
+
+.compare-diff__jamo em {
+  font-style: normal;
+  font-size: 14px;
+  color: #AEAEB2;
+  margin: 0 6px;
+  vertical-align: middle;
+}
+
+.compare-diff__type {
+  font-family: var(--font-pretendard);
+  font-size: 11px;
+  font-weight: 400;
+  color: #8E8E93;
+  letter-spacing: 0.04em;
+}
+
+.compare-swap {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid #D1D1D6;
+  background: #ffffff;
+  font-size: 15px;
+  color: #3a3a3c;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, border-color 0.2s ease;
+}
+
+.compare-stage.has-both .compare-swap {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.compare-swap:hover {
+  border-color: var(--color-black);
+}

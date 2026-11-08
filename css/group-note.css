@@ -1,0 +1,38 @@
+/* ==========================================================================
+   group-note.css — 계열 설명 문구 (오른쪽 위 '뜻' 바로 아래, 오른쪽 정렬)
+   ========================================================================== */
+
+.detail-group-note {
+  position: absolute;
+  top: 122px;
+  right: 100px;
+  z-index: 10;
+  max-width: 560px;
+  margin: 0;
+  text-align: right;
+  font-family: var(--font-pretendard);
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.55;
+  letter-spacing: -0.02em;
+  color: #8E8E93;
+  word-break: keep-all;
+  white-space: pre-line;   /* data-note 안의 줄바꿈(&#10;)을 그대로 표시 */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity 0.35s ease, transform 0.35s ease, visibility 0.35s;
+  pointer-events: none;
+}
+
+.is-word-active .detail-group-note.has-note {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* 비교 모드에서는 숨김 */
+body.is-comparing .detail-group-note {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}

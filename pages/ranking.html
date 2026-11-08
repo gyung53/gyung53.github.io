@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>오늘의 결 — 소리결</title>
+
+<!-- Pretendard (로컬 파일) / Apple SD Gothic Neo 는 맥 시스템 폰트 사용 -->
+<link rel="stylesheet" href="/fonts/pretendard/pretendard.css">
+
+<link rel="stylesheet" href="/css/reset.css">
+<link rel="stylesheet" href="/css/variables.css">
+<link rel="stylesheet" href="/css/ranking.css">
+<link rel="stylesheet" href="/css/attract.css">
+</head>
+<body data-page="ranking">
+
+<div class="rank" id="rank-page">
+
+  <header class="rank__head">
+    <a href="/main.html" class="rank__logo" aria-label="소리결 메인으로">
+      <img src="/assets/images/logo/sorigyeol-logo.svg" alt="소리결" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'소리결',className:'rank__logo-text'}))">
+    </a>
+    <nav class="rank__tabs" aria-label="기간 선택">
+      <button type="button" class="rank__tab is-active" data-scope="today">오늘</button>
+      <button type="button" class="rank__tab" data-scope="all">전체</button>
+    </nav>
+  </header>
+
+  <main class="rank__body">
+    <section class="rank__hero" aria-live="polite">
+      <p class="rank__eyebrow" id="rank-eyebrow"></p>
+      <h1 class="rank__title" id="rank-title">오늘의 결</h1>
+      <p class="rank__sub" id="rank-sub">관람객들이 가장 오래 머문 소리의 결</p>
+      <div class="rank__feature" id="rank-feature"></div>
+    </section>
+
+    <section class="rank__list-wrap">
+      <ol class="rank__list" id="rank-list"></ol>
+      <p class="rank__empty" id="rank-empty">
+        아직 기록이 없어요.<br>
+        계열어를 둘러보면 이곳에 결이 쌓여요.
+      </p>
+    </section>
+  </main>
+
+</div>
+
+<script src="/js/gyeol-stats.js"></script>
+<script src="/js/ranking.js"></script>
+<script src="/js/words-data.js"></script>
+<script src="/js/attract.js"></script>
+</body>
+</html>

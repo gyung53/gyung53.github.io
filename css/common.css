@@ -1,0 +1,443 @@
+/* ==========================================================================
+   common.css — 페이지 공통 요소
+   (기본 타이포, 화면에 딱 맞추는 캔버스(스크롤 없음), GNB)
+   ========================================================================== */
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-pretendard);
+  color: var(--color-black);
+  background: var(--color-white);
+  font-weight: 400;
+  margin: 0;
+  overflow: hidden;           /* 페이지 전체 스크롤 절대 금지 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --------------------------------------------------------------------------
+   .page — 고정 픽셀 캔버스. 실제 크기(예: 1900×1080)는 그대로 유지한 채
+   js/common.js 의 fitPage() 가 뷰포트에 맞춰 transform: scale() 로
+   축소/확대합니다. → 어떤 화면 크기에서도 가로/세로 스크롤이 생기지 않습니다.
+   -------------------------------------------------------------------------- */
+.page {
+  width: var(--page-width);
+  flex: 0 0 auto;
+  padding: var(--pad-top) var(--pad-right) var(--pad-bottom) var(--pad-left);
+  transform-origin: center center;
+  opacity: 0;                 /* fitPage()가 스케일 계산을 마치면 보여줍니다(깜빡임 방지) */
+  transition: opacity 0.25s ease;
+}
+
+.page.is-ready {
+  opacity: 1;
+}
+
+/* --------------------------------------------------------------------------
+   GNB
+   구조: .gnb (1676px) > .gnb__left (중앙 정렬 메뉴) + .gnb__right (원형 검색 버튼)
+   - 기본 상태: 메뉴는 GNB 중앙에 위치, 검색 버튼은 우측 끝에 위치
+   - 활성 상태: 메뉴는 좌측 끝으로 이동, 검색 원형 버튼이 80px 간격을 두고
+               좌측으로 길게 늘어나며 하나의 일체형 캡슐 검색창이 됨
+   -------------------------------------------------------------------------- */
+.gnb {
+  position: relative;
+  width: var(--gnb-width);
+  height: var(--gnb-height);
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--gnb-gap-below);
+}
+
+/* ---- 왼쪽: 메뉴 ---- */
+.gnb__left {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  flex: 1 1 0;
+  transition: flex 0.55s var(--ease-standard);
+}
+
+.gnb--active .gnb__left {
+  flex: 0 0 auto;
+}
+
+/* 기본 상태에서 메뉴를 중앙에 위치시키는 양쪽 탄력 스페이서 */
+.gnb__spacer {
+  min-width: 0;
+  transition: flex 0.55s var(--ease-standard), width 0.55s var(--ease-standard);
+}
+
+.gnb__spacer--left {
+  flex: 1 1 0;
+}
+
+/* 우측에 48px 검색 버튼이 있으므로 우측 스페이서와 결합하여 정확히 전체 1676px 중앙 정렬 */
+.gnb__spacer--right {
+  flex: 1 1 0;
+  margin-right: -48px;
+}
+
+.gnb--active .gnb__spacer--left,
+.gnb--active .gnb__spacer--right {
+  flex: 0 0 0px;
+  width: 0;
+  margin-right: 0;
+}
+
+.gnb__nav {
+  display: flex;
+  align-items: center;
+  gap: 44px;
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.gnb__nav.is-pairing .gnb__link:not(.is-paired) {
+  opacity: 0.35;
+}
+
+.gnb__link {
+  font-family: var(--font-pretendard);
+  font-weight: 600;                  /* SemiBold */
+  font-size: var(--fs-nav);
+  line-height: 1;
+  color: var(--color-black);
+  padding: 4px 0;
+  position: relative;
+  transition: opacity 0.25s var(--ease-standard);
+}
+
+.gnb__link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 2px;
+  background: var(--color-black);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s var(--ease-standard);
+}
+
+.gnb__link:hover::after,
+.gnb__link.is-current::after,
+.gnb__link.is-paired::after {
+  transform: scaleX(1);
+}
+
+.gnb__link:hover {
+  opacity: 0.6;
+}
+
+/* ---- 오른쪽: 검색 캡슐(Pill) 영역 ---- */
+.gnb__right {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 48px;
+  flex: 0 0 48px;
+  margin-left: 0;
+  transition: flex 0.55s var(--ease-standard), margin-left 0.55s var(--ease-standard);
+}
+
+.gnb--active .gnb__right {
+  flex: 1 1 0;
+  margin-left: 80px;                   /* 메뉴와 80px 스페이스 */
+}
+
+/* 하나의 단일 원(48px)에서 가로로 늘어나는 일체형 검색 캡슐 */
+.gnb__search-pill {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  border-radius: 24px;
+  border: 1px solid var(--color-line);
+  background: var(--color-surface);
+  overflow: hidden;
+  transition: width 0.55s var(--ease-standard), border-color 0.25s var(--ease-standard), background-color 0.25s var(--ease-standard);
+}
+
+.gnb--active .gnb__search-pill {
+  width: 100%;
+}
+
+.gnb__search-pill:hover {
+  border-color: rgba(0, 0, 0, 0.25);
+}
+
+.gnb--active .gnb__search-pill:focus-within {
+  border-color: var(--color-black);
+}
+
+/* 내부 텍스트 인풋 */
+.gnb__search-input {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 100%;
+  border: none;
+  background: transparent;
+  padding: 0 12px 0 24px;
+  font-family: var(--font-pretendard);
+  font-size: 15px;
+  color: var(--color-black);
+  box-sizing: border-box;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s var(--ease-standard) 0.12s;
+}
+
+.gnb--active .gnb__search-input {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.gnb__search-input::placeholder {
+  color: var(--color-gray-40);
+}
+
+.gnb__search-input:focus,
+.gnb__search-input:focus-visible {
+  outline: none;
+}
+
+/* 내부 검색 버튼 (원 안의 돋보기 아이콘) */
+.gnb__search-btn {
+  flex: 0 0 46px;
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  transition: background-color 0.2s var(--ease-standard);
+}
+
+.gnb__search-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.gnb__search-btn:focus,
+.gnb__search-btn:focus-visible {
+  outline: none;
+}
+
+.gnb__search-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.gnb__search-btn circle,
+.gnb__search-btn line {
+  stroke: var(--color-black);
+  stroke-width: 1.6;
+  fill: none;
+}
+
+/* ---- 실시간 검색 추천 드롭다운 ---- */
+.gnb__search-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 100%;
+  min-width: 320px;
+  max-width: 440px;
+  background: #FFFFFF;
+  border: 1px solid var(--color-line);
+  border-radius: 18px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+  padding: 8px;
+  box-sizing: border-box;
+  z-index: 1000;
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 380px;
+  overflow-y: auto;
+  animation: searchDropdownFadeIn 0.2s var(--ease-standard);
+}
+
+@keyframes searchDropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.gnb__search-dropdown.is-open {
+  display: flex;
+}
+
+.gnb__search-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.15s var(--ease-standard);
+  font-family: var(--font-pretendard);
+}
+
+.gnb__search-item:hover,
+.gnb__search-item.is-focused {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.gnb__search-item-left {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.gnb__search-item-word {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-black);
+}
+
+.gnb__search-item-group {
+  font-size: 12px;
+  color: var(--color-gray-50);
+}
+
+.gnb__search-item-badge {
+  font-size: 11px;
+  font-weight: 500;
+  color: #777777;
+  background: #F4F4F4;
+  padding: 3px 8px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+
+.gnb__search-empty {
+  padding: 18px 16px;
+  text-align: center;
+  font-family: var(--font-pretendard);
+  font-size: 13px;
+  color: var(--color-gray-50);
+}
+
+.gnb__search-toast {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  background: #222222;
+  color: #FFFFFF;
+  padding: 10px 18px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-family: var(--font-pretendard);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 1100;
+  white-space: nowrap;
+}
+
+.gnb__search-toast.is-show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* ---- 음성 검색 (voice.js) ---- */
+.gnb__voice-btn {
+  touch-action: none;          /* 누르고 있는 동안 스크롤·확대 방지 */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s var(--ease-standard) 0.12s, background-color 0.2s var(--ease-standard);
+}
+
+.gnb--active .gnb__voice-btn {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.gnb__voice-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.gnb__voice-btn:focus,
+.gnb__voice-btn:focus-visible {
+  outline: none;
+}
+
+.gnb__voice-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.gnb__voice-btn rect,
+.gnb__voice-btn path,
+.gnb__voice-btn line {
+  stroke: var(--color-black);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  fill: none;
+}
+
+/* 듣는 중: 검정 원 + 파동 */
+.gnb__voice-btn.is-listening {
+  background-color: var(--color-black);
+  animation: voicePulse 1.2s var(--ease-standard) infinite;
+}
+
+.gnb__voice-btn.is-listening rect,
+.gnb__voice-btn.is-listening path,
+.gnb__voice-btn.is-listening line {
+  stroke: var(--color-white);
+}
+
+.gnb--listening .gnb__search-pill {
+  border-color: var(--color-black);
+}
+
+@keyframes voicePulse {
+  0%   { box-shadow: 0 0 0 0 rgba(18, 18, 18, 0.35); }
+  70%  { box-shadow: 0 0 0 10px rgba(18, 18, 18, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(18, 18, 18, 0); }
+}

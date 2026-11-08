@@ -1,0 +1,119 @@
+/* ==========================================================================
+   attract.css — 대기 화면
+   ========================================================================== */
+
+.attract {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  background: #ffffff;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  justify-items: center;
+  padding: 40px 60px 44px;
+  box-sizing: border-box;
+  font-family: var(--font-pretendard);
+  color: var(--color-black);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.6s ease, visibility 0.6s;
+  cursor: pointer;
+}
+
+.attract.is-show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.attract__brand {
+  justify-self: start;
+  font-family: 'Apple SD Gothic Neo', var(--font-pretendard);
+  font-weight: 300;
+  font-size: 22px;
+  letter-spacing: -0.03em;
+}
+
+/* GIF 두 장을 겹쳐 두고 번갈아 크로스페이드 */
+.attract__stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.attract__gif {
+  position: absolute;
+  inset: 4% 0;
+  width: 100%;
+  height: 92%;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity 0.9s ease;
+}
+
+.attract__gif.is-on {
+  opacity: 1;
+}
+
+.attract__gif:not([src]) {
+  visibility: hidden;
+}
+
+.attract__caption {
+  text-align: center;
+  margin-top: 12px;
+}
+
+.attract__word {
+  margin: 0;
+  font-family: 'Apple SD Gothic Neo', var(--font-pretendard);
+  font-weight: 100;
+  font-size: 64px;
+  line-height: 1.1;
+  letter-spacing: -0.05em;
+}
+
+.attract__meta {
+  margin: 10px 0 0;
+  font-size: 15px;
+  font-weight: 300;
+  color: #8E8E93;
+}
+
+.attract.is-text-in .attract__word,
+.attract.is-text-in .attract__meta {
+  animation: attractTextIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.attract.is-text-in .attract__meta {
+  animation-delay: 0.08s;
+}
+
+@keyframes attractTextIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.attract__hint {
+  margin: 30px 0 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 400;
+  color: #3a3a3c;
+  letter-spacing: -0.02em;
+}
+
+.attract__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--color-black);
+  animation: attractPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes attractPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.25; transform: scale(0.7); }
+}

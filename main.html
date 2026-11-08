@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>소리결 — 의성어·의태어 계열어 사전</title>
+<meta name="description" content="소리결, 소리의 움직이는 상태 또는 소리가 흘러가는 모양이나 무늬를 일컫는 순 우리말.">
+<meta property="og:title" content="소리결 — 의성어·의태어 계열어 사전">
+<meta property="og:description" content="소리결, 소리의 움직이는 상태 또는 소리가 흘러가는 모양이나 무늬를 일컫는 순 우리말.">
+
+<!-- Pretendard (로컬 파일) -->
+<link rel="stylesheet" href="/fonts/pretendard/pretendard.css">
+
+<link rel="stylesheet" href="/css/reset.css">
+<link rel="stylesheet" href="/css/variables.css">
+<link rel="stylesheet" href="/css/common.css">
+<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/attract.css">
+</head>
+<body data-page="main">
+<div class="page" id="main-page">
+
+  <!-- ============================= GNB ============================= -->
+  <header class="gnb" id="main-gnb">
+    <div class="gnb__left" id="gnb-left">
+      <span class="gnb__spacer gnb__spacer--left" aria-hidden="true"></span>
+      <nav class="gnb__nav" id="gnb-nav" aria-label="카테고리">
+        <a href="/pages/state.html"         class="gnb__link" id="nav-state"        data-page="state"        data-key="circle">상태/느낌</a>
+        <a href="/pages/expression.html"    class="gnb__link" id="nav-expression"   data-page="expression"   data-key="heart">표정/감정</a>
+        <a href="/pages/light.html"         class="gnb__link" id="nav-light"        data-page="light"        data-key="star">빛/색깔</a>
+        <a href="/pages/shape.html"         class="gnb__link" id="nav-shape"        data-page="shape"        data-key="triangle">모양/외형</a>
+        <a href="/pages/person-sound.html"  class="gnb__link" id="nav-person"       data-page="person-sound" data-key="arch">사람</a>
+        <a href="/pages/object-sound.html"  class="gnb__link" id="nav-object"       data-page="object-sound" data-key="hexagon">사물</a>
+        <a href="/pages/nature.html"        class="gnb__link" id="nav-nature"       data-page="nature"       data-key="flower">자연</a>
+      </nav>
+      <span class="gnb__spacer gnb__spacer--right" aria-hidden="true"></span>
+    </div>
+    <div class="gnb__right" id="gnb-right">
+      <form class="gnb__search-pill" id="gnb-search-form" role="search" action="javascript:void(0);">
+        <input type="text" class="gnb__search-input" id="search-input" placeholder="검색할 의성어·의태어를 입력하세요" autocomplete="off" aria-label="의성어 의태어 검색">
+        <button class="gnb__search-btn" id="search-toggle-btn" type="button" aria-label="검색창 열기">
+          <svg viewBox="0 0 20 20" aria-hidden="true">
+            <circle cx="8.5" cy="8.5" r="6.5"/>
+            <line x1="13.3" y1="13.3" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </form>
+    </div>
+  </header>
+
+  <!-- ============================= HERO (도형 7개) ============================= -->
+  <section class="hero" id="main-hero">
+
+    <!-- 4개 도형 줄: 상태/느낌, 표정/감정, 빛/색깔, 모양/외형 -->
+    <div class="hero__row-top" id="hero-row-top">
+
+      <!-- circle → 상태/느낌 : 굵기가 서로 다른 동심원 라인, 안쪽 작은 원부터 커지는 파동 -->
+      <a href="/pages/state.html" class="shape shape--circle" id="shape-circle" data-key="circle" aria-label="상태/느낌 살펴보기">
+        <svg class="shape__svg" viewBox="0 0 340 340" aria-hidden="true">
+          <g class="shape__base">
+            <circle data-fill cx="170" cy="170" r="168"/>
+          </g>
+          <g class="shape__reveal">
+            <!-- 1: 외곽 블랙 링 (두께 24px) -->
+            <circle data-fill cx="170" cy="170" r="168"/>
+            <!-- 2: 화이트 갭 (너비 20px) -->
+            <circle fill="#ffffff" cx="170" cy="170" r="144"/>
+            <!-- 3: 얇은 블랙 링 (두께 10px) -->
+            <circle data-fill cx="170" cy="170" r="124"/>
+            <!-- 4: 넓은 화이트 갭 (너비 38px) -->
+            <circle fill="#ffffff" cx="170" cy="170" r="114"/>
+            <!-- 5: 굵은 블랙 링 (두께 26px) -->
+            <circle data-fill cx="170" cy="170" r="76"/>
+            <!-- 6: 중간 화이트 갭 (너비 26px) -->
+            <circle fill="#ffffff" cx="170" cy="170" r="50"/>
+            <!-- 7: 중심 블랙 코어 (반지름 24px) -->
+            <circle data-fill cx="170" cy="170" r="24"/>
+          </g>
+        </svg>
+      </a>
+
+      <!-- heart → 표정/감정 : 원형 얼굴 + 하트 눈 2개 + 웃는 입 라인 -->
+      <a href="/pages/expression.html" class="shape shape--heart" id="shape-heart" data-key="heart" aria-label="표정/감정 살펴보기">
+        <svg class="shape__svg" viewBox="0 0 340 340" aria-hidden="true">
+          <g class="shape__base">
+            <path data-fill d="M170,320 C170,320 18,214 18,120 C18,66 60,32 104,32 C136,32 160,54 170,84
+                     C180,54 204,32 236,32 C280,32 322,66 322,120 C322,214 170,320 170,320 Z"/>
+          </g>
+          <g class="shape__reveal">
+            <!-- 1: 원형 얼굴 -->
+            <circle class="heart-face" data-fill cx="170" cy="170" r="162"/>
+            <!-- 2: 왼쪽 하트 눈 (원래 하트와 100% 동일한 비율, 정확한 크기와 위치) -->
+            <path class="heart-eye heart-eye--left" fill="#ffffff"
+                  d="M112,185 C112,185 69,156 69,129 C69,114 81,105 94,105 C103,105 109,111 112,119 C115,111 121,105 130,105 C143,105 155,114 155,129 C155,156 112,185 112,185 Z"/>
+            <!-- 3: 오른쪽 하트 눈 (원래 하트와 100% 동일한 비율, 정확한 크기와 위치) -->
+            <path class="heart-eye heart-eye--right" fill="#ffffff"
+                  d="M228,185 C228,185 185,156 185,129 C185,114 197,105 210,105 C219,105 225,111 228,119 C231,111 237,105 246,105 C259,105 271,114 271,129 C271,156 228,185 228,185 Z"/>
+            <!-- 4: 웃는 입 라인 -->
+            <path class="heart-mouth" fill="none" stroke="#ffffff" stroke-width="16" stroke-linecap="round"
+                  d="M106,224 Q170,286 234,224"/>
+          </g>
+        </svg>
+      </a>
+
+      <!-- star → 빛/색깔 : 전구 본체 + 전구알 정중앙에 적당한 크기(지름 ~86px)로 위치한 반짝이는 별 -->
+      <a href="/pages/light.html" class="shape shape--star" id="shape-star" data-key="star" aria-label="빛/색깔 살펴보기">
+        <svg class="shape__svg" viewBox="0 0 340 340" aria-hidden="true">
+          <g class="shape__base">
+            <polygon data-fill points="170,2 196,107.2 288.8,51.2 232.8,144 338,170 232.8,196 288.8,288.8 196,232.8 170,338 144,232.8 51.2,288.8 107.2,196 2,170 107.2,144 51.2,51.2 144,107.2"/>
+          </g>
+          <g class="shape__reveal">
+            <!-- 1: 큰 전구 유리구 본체 (중심 y=135) -->
+            <path class="bulb-glass" data-fill
+                  d="M170,16 C95,16 52,68 52,135 C52,188 86,222 108,244 C118,255 122,264 122,272 L218,272 C218,264 222,255 232,244 C254,222 288,188 288,135 C288,68 245,16 170,16 Z"/>
+            <!-- 2,3,4: 소켓 나사산 -->
+            <rect class="bulb-base" data-fill x="116" y="278" width="108" height="18" rx="9"/>
+            <rect class="bulb-base" data-fill x="125" y="300" width="90" height="16" rx="8"/>
+            <rect class="bulb-base" data-fill x="136" y="320" width="68" height="14" rx="7"/>
+            <!-- 5: 전구알 중앙(170, 135)에 약 163px 크기로 위치한 반짝이는 별 -->
+            <polygon class="fx-spark" fill="#ffffff"
+                     points="170,54 181,109 228,77 196,124 252,135 196,146 228,193 181,161 170,216 159,161 112,193 144,146 88,135 144,124 112,77 159,109"/>
+          </g>
+        </svg>
+      </a>
+
+      <!-- triangle → 모양/외형 : 더 커진 원과 더 커진 삼각형 + #ffffff 스트로크 -->
+      <a href="/pages/shape.html" class="shape shape--triangle" id="shape-triangle" data-key="triangle" aria-label="모양/외형 살펴보기">
+        <svg class="shape__svg" viewBox="0 0 340 340" aria-hidden="true">
+          <g class="shape__base">
+            <polygon data-fill points="170,40 338,338 2,338"/>
+          </g>
+          <g class="shape__reveal">
+            <circle class="triangle-circle" data-fill cx="135" cy="155" r="150"/>
+            <polygon class="triangle-poly" fill="var(--color-black)" stroke="#ffffff" stroke-width="14" stroke-linejoin="round" stroke-linecap="round"
+                     points="205,134 320,334 90,334"/>
+          </g>
+        </svg>
+      </a>
+
+    </div>
+
+    <!-- 로고/설명 + 3개 도형 줄: 사람, 사물, 자연 -->
+    <div class="hero__row-bottom" id="hero-row-bottom">
+
+      <div class="hero__intro" id="hero-intro">
+        <div class="hero__logo" id="hero-logo-container">
+          <img src="/assets/images/logo/sorigyeol-logo.svg" alt="소리결" id="hero-logo-img" style="display: block;">
+          <p class="hero__logo-fallback" id="hero-logo-fallback" aria-hidden="true" style="display: none;">소리결</p>
+        </div>
+        <p class="hero__desc" id="hero-desc">소리결, 소리의 움직이는 상태 또는 소리가 흘러가는 모양이나 무늬를 일컫는 순 우리말. 반짝과 빤짝 사이, 살랑과 설렁 사이에는 분명히 다른 결이 있다.</p>
+        <a href="/pages/ranking.html" class="hero__today" id="hero-today-link">오늘의 결 보기 <span aria-hidden="true">→</span></a>
+      </div>
+
+      <div class="hero__row-3" id="hero-row-3">
+
+        <!-- arch → 사람 : 아치 머리 축소+상승, 반원 몸통 팝업 -->
+        <a href="/pages/person-sound.html" class="shape shape--arch" id="shape-arch" data-key="arch" aria-label="사람 살펴보기">
+          <svg class="shape__svg" viewBox="0 0 340 340" aria-hidden="true">
+            <g class="shape__base">
+              <path data-fill d="M2,338 L2,170 A168,168 0 0 1 338,170 L338,338 Z"/>
+            </g>
+            <g class="shape__reveal">
+              <path class="arch-head" data-fill d="M88,170 L88,88 A82,82 0 0 1 252,88 L252,170 Z"/>
+              <path class="arch-body" data-fill d="M26,338 Q26,190 170,190 Q314,190 314,338 Z"/>
+            </g>
+          </svg>
+        </a>
+
+        <!-- hexagon → 사물 : 중앙 헥사곤으로 축소된 뒤 6개 헥사곤 팝아웃 + 중심 원 -->
+        <a href="/pages/object-sound.html" class="shape shape--hexagon" id="shape-hexagon" data-key="hexagon" aria-label="사물 살펴보기">
+          <svg class="shape__svg" viewBox="0 0 340 340" aria-hidden="true">
+            <g class="shape__base">
+              <polygon data-fill points="338,170 254,315.5 86,315.5 2,170 86,24.5 254,24.5"/>
+            </g>
+            <g class="shape__reveal">
+              <!-- 6개 외곽 헥사곤 -->
+              <polygon data-fill points="310,218.5 282,267 226,267 198,218.5 226,170 282,170"/>
+              <polygon data-fill points="226,267 198,315.5 142,315.5 114,267 142,218.5 198,218.5"/>
+              <polygon data-fill points="142,218.5 114,267 58,267 30,218.5 58,170 114,170"/>
+              <polygon data-fill points="142,121.5 114,170 58,170 30,121.5 58,73 114,73"/>
+              <polygon data-fill points="226,73 198,121.5 142,121.5 114,73 142,24.5 198,24.5"/>
+              <polygon data-fill points="310,121.5 282,170 226,170 198,121.5 226,73 282,73"/>
+              <!-- 중앙 화이트 서클 -->
+              <circle class="hex-center-circle" fill="#ffffff" cx="170" cy="170" r="28"/>
+            </g>
+          </svg>
+        </a>
+
+        <!-- flower → 자연 : assets/images/shapes 그래픽 (flower.png, flowerLine.png, leapLeft.png, leapRight.png) -->
+        <a href="/pages/nature.html" class="shape shape--flower" id="shape-flower" data-key="flower" aria-label="자연 살펴보기">
+          <svg class="shape__svg" viewBox="-38 -38 416 416" aria-hidden="true">
+            <g class="shape__base">
+              <image href="/assets/images/shapes/flower.png" xlink:href="/assets/images/shapes/flower.png"
+                     x="0" y="0" width="340" height="340" preserveAspectRatio="xMidYMid meet"/>
+            </g>
+            <g class="shape__reveal">
+              <!-- 1: 줄기 flowerLine.png -->
+              <image class="flower-stem" href="/assets/images/shapes/flowerLine.png" xlink:href="/assets/images/shapes/flowerLine.png"
+                     x="145" y="100" width="50" height="220" preserveAspectRatio="xMidYMid meet"/>
+              <!-- 2: 왼쪽 잎 leapLeft.png -->
+              <image class="flower-leaf-l" href="/assets/images/shapes/leapLeft.png" xlink:href="/assets/images/shapes/leapLeft.png"
+                     x="60" y="180" width="100" height="90" preserveAspectRatio="xMidYMid meet"/>
+              <!-- 3: 오른쪽 잎 leapRight.png -->
+              <image class="flower-leaf-r" href="/assets/images/shapes/leapRight.png" xlink:href="/assets/images/shapes/leapRight.png"
+                     x="180" y="180" width="100" height="90" preserveAspectRatio="xMidYMid meet"/>
+              <!-- 4: 꽃 flower.png -->
+              <image class="flower-head" href="/assets/images/shapes/flower.png" xlink:href="/assets/images/shapes/flower.png"
+                     x="90" y="0" width="160" height="160" preserveAspectRatio="xMidYMid meet"/>
+            </g>
+          </svg>
+        </a>
+
+      </div>
+    </div>
+
+  </section>
+
+</div>
+
+<script src="/js/words-data.js"></script>
+<script src="/js/common.js"></script>
+<script src="/js/voice.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/attract.js"></script>
+</body>
+</html>
